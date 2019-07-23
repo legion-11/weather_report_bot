@@ -20,6 +20,7 @@ def handle_help(message):
                    "/city <название города>\n" \
                    "/city <координаты>\n\n" \
                    "⁉️Советуем первым делом прочитать инструкцию /help"
+
     bot.send_message(message.chat.id, text_message)
     print(message.text, message.chat.username)
 
@@ -44,6 +45,7 @@ def handle_help(message):
                    "Например:\n" \
                    "/notification 7:00\n" \
                    "/notification 7"
+
     bot.send_message(message.chat.id, text_message, parse_mode="Markdown")
     print(message.text, message.chat.username)
 
@@ -52,15 +54,16 @@ def handle_help(message):
 def handle_weather_few_days(message):
     pattern = r"/weather [\d]+"
     real_message = re.search(pattern, message.text)[0]
+
     days_number = real_message.split(" ")[1]
     days_number = "5" if int(days_number) > 5 else days_number
-    print(f"days number - {days_number}")
 
     user = User.query.filter_by(username=message.chat.username).first()
     if user:
         city = user.city
         message_list = weather.get_weather_report(city, int(days_number))
         message_list[0] = message_list[0].replace("N", days_number)
+
         for msg in message_list:
             bot.send_message(message.chat.id, msg,  parse_mode="Markdown")
     else:
@@ -81,6 +84,7 @@ def handle_detail_weather(message):
         text_message = "Укажите свой город:\n" \
                        "/city <Имя города>\n" \
                        "/city <шырота> <долгота>"
+
     bot.send_message(message.chat.id, text_message, parse_mode="Markdown")
     print(message.text, message.chat.username)
 
@@ -95,6 +99,7 @@ def handle_weather(message):
         text_message = "Укажите свой город:\n" \
                        "/city <Имя города>\n" \
                        "/city <шырота> <долгота>"
+
     bot.send_message(message.chat.id, text_message, parse_mode="Markdown")
     print(message.text, message.chat.username)
 
@@ -103,16 +108,14 @@ def handle_weather(message):
 def handle_city_by_coord(message):
     pattern = r"/city -?[\d]+.?[\d]+[\s]-?[\d]+.?[\d]+"
     real_message = re.search(pattern, message.text)[0].split(" ")
+
     lat = real_message[1]
     lon = real_message[2]
-    print(lat)
-    print(lon)
-    print("---------------")
     city = weather.get_city_by_coord(lat, lon)
     city_name = city['name']
     country = city['country']
-
     username = message.chat.username
+
     if city_name:
         text_message = f"Город установлен: {city_name} ({country})"
         user = User.query.filter_by(username=message.chat.username).first()
@@ -145,8 +148,10 @@ def handle_city_by_real_coord(message):
 def handle_city_by_name(message):
     pattern = r"/city [a-zA-ZА-ї\s]+-?[a-zA-ZА-ї\s]+"
     city_name = re.search(pattern, message.text)[0][6:]
+
     city = weather.get_city(city_name)
     username = message.chat.username
+
     if city[0]:
         text_message = f"Город установлен: {city[0]['name']} ({city[0]['country']})"
         user = User.query.filter_by(username=message.chat.username).first()
@@ -188,6 +193,7 @@ def handle_city(message):
                        "/city Kiev\n" \
                        "/city 55.7507 37.6177\n" \
                        "/city 55°45′21″  37°37′04″"
+
     bot.send_message(message.chat.id, text_message)
     print(message.text, message.chat.username)
 
@@ -196,6 +202,7 @@ def handle_city(message):
 def handle_notification_with_time(message):
     pattern = r"/notification [\d]+:[\d]+"
     real_message = re.search(pattern, message.text)[0].split(" ")[1]
+
     hours = (real_message.split(":")[0])
     minutes = (real_message.split(":")[1])
 
@@ -221,6 +228,7 @@ def handle_notification_with_time(message):
 def handle_notification_without_minutes(message):
     pattern = r"/notification [\d]+"
     real_message = re.search(pattern, message.text)[0].split(" ")[1]
+
     hours = (real_message.split(":")[0])
 
     user = User.query.filter_by(username=message.chat.username).first()
@@ -258,6 +266,7 @@ def handle_notification(message):
         text_message = "Сначала Укажите свой город:\n" \
                        "/city <Имя города>\n" \
                        "/city <шырота> <долгота>"
+
     bot.send_message(message.chat.id, text_message)
     print(message.text, message.chat.username)
 
@@ -268,11 +277,12 @@ def handle_off(message):
     if user:
         user.notification_time = None
         db.session.commit()
+
     bot.send_message(message.chat.id, "Напоминание снято")
     print(message.text, message.chat.username)
 
 
 @bot.message_handler(content_types=["text"])
 def repeat_all_messages(message):
-    bot.send_message(message.chat.id, "Мамка твоя " + message.text)
+    bot.send_message(message.chat.id, message.text)
     print(message.text, message.chat.username)

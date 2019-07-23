@@ -1,8 +1,8 @@
 import os
-
 import requests
 from config import Config
 import time
+
 
 appid = Config.APPID
 
@@ -11,6 +11,7 @@ def get_city(city_name):
     res = requests.get("http://api.openweathermap.org/data/2.5/find",
                        params={'q': city_name, 'type': 'like', 'units': 'metric', 'lang': 'ru', 'APPID': appid})
     data = res.json()
+
     if 'list' in data:
         cities = [{'name': d['name'], 'country': d['sys']['country'], 'id': d['id']} for d in data['list']]
     else:
@@ -21,9 +22,9 @@ def get_city(city_name):
 def get_city_by_coord(lat, lon):
     if not -90 <= float(lat) <= 90 and not -180 <= float(lon) <= 180:
         return {'name': None, 'country': None, 'id': None}
+
     res = requests.get("http://api.openweathermap.org/data/2.5/weather",
                        params={'lat': lat, 'lon': lon, 'type': 'like', 'units': 'metric', 'lang': 'ru', 'APPID': appid})
-
     data = res.json()
 
     country = data['sys']['country'] if "sys" in data and "country" in data['sys'] else None
@@ -39,12 +40,12 @@ def get_current_weather(city_name):
     res = requests.get("http://api.openweathermap.org/data/2.5/weather",
                        params={'id': city_id, 'units': 'metric', 'lang': 'ru', 'APPID': appid})
     data = res.json()
+
     condition = data['weather'][0]['description']
     temp = data['main']['temp']
     temp_min = data['main']['temp_min']
     temp_max = data['main']['temp_max']
     wind_speed = data['wind']['speed']
-
     temperature = temp if temp_max == temp_min else f"от {temp_min}ºC до {temp_max}"
 
     result = f"*Прогноз для:* {city_name}\n" \
@@ -59,6 +60,7 @@ def detail_weather(city_name):
     res = requests.get("http://api.openweathermap.org/data/2.5/weather",
                        params={'id': city_id, 'units': 'metric', 'lang': 'ru', 'APPID': appid})
     data = res.json()
+
     condition = data['weather'][0]['description']
     temp = data['main']['temp']
     temp_min = data['main']['temp_min']
@@ -68,19 +70,15 @@ def detail_weather(city_name):
     humidity = data['main']['humidity']
     lat = data['coord']['lat']
     lon = data['coord']['lon']
-    print(data)
+    temperature = temp if temp_max == temp_min else f"от {temp_min}ºC до {temp_max}"
 
     if hasattr(time, 'tzset'):
-        # Move the time zone info into os.environ. See ticket #2315 for why
-        # we don't do this unconditionally (breaks Windows).
         os.environ['TZ'] = 'Europe/Kiev'
         time.tzset()
 
     sunrise = time.strftime("%H:%M", time.localtime(data['sys']['sunrise']))
     sunset = time.strftime("%H:%M", time.localtime(data['sys']['sunset']))
     current_time = time.strftime("%H:%M", time.localtime(data['dt']))
-
-    temperature = temp if temp_max == temp_min else f"от {temp_min}ºC до {temp_max}"
 
     result = f"*Прогноз для:* {city_name}\n" \
              f"*Условие:* {condition}\n" \
@@ -102,14 +100,16 @@ def get_weather_report(city_name, days=5):
                        params={'id': city_id, 'units': 'metric', 'lang': 'ru', 'APPID': appid})
     data = res.json()
 
-    i = 0
     message_list = list()
     first_date = data['list'][0]['dt_txt']
+
     if first_date.endswith("00:00:00"):
         message = f"*Прогноз погоды на N дней для:* {city_name}"
     else:
         message_list.append(f"*Прогноз погоды на N дней для:* {city_name}")
         message = f"*0 день* ({first_date[5:7]}/{first_date[8:10]})\n"
+
+    day_count = 0
     for moment in data['list']:
         date = moment['dt_txt']
         temperature = str(moment['main']['temp'])[:2]
@@ -117,10 +117,10 @@ def get_weather_report(city_name, days=5):
         if date.endswith("00:00:00"):
             message_list.append(message)
             message = ""
-            i += 1
-            if i == days+1:
+            day_count += 1
+            if day_count == days+1:
                 break
-            message += f"*{i} день* ({date[5:7]}/{date[8:10]})\n"
+            message += f"*{day_count} день* ({date[5:7]}/{date[8:10]})\n"
         message += f"{date[-8:-3]} {temperature}ºC {condition}\n"
 
     return message_list
