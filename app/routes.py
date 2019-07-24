@@ -22,6 +22,10 @@ def run_tasks():
     notification_time = request.args.get("notification_time")
     print(notification_time)
     if chat_id and notification_time:
+        try:
+            app.apscheduler.remove_job(chat_id)
+        except Exception:
+            print("ERROR")
         app.apscheduler.add_job(func=scheduled_task,
                                 next_run_time=datetime.now().replace(hour=hours, minute=minutes, second=0),
                                 trigger='interval', seconds=30, args=[chat_id], id=chat_id)
