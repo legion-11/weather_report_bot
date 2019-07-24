@@ -1,6 +1,5 @@
 import telebot
-from app import bot
-from app import app
+from app import bot, app
 from flask import request
 
 
@@ -11,3 +10,19 @@ def index():
         bot.bot.process_new_updates([update])
         return ""
     return "<h1>Kore ga Botto da</h1>"
+
+
+@app.route('/run-tasks')
+def run_tasks():
+    chat_id = request.args.get("chat_id")
+    notification_time = request.args.get("notification_time")
+    print(notification_time)
+    if chat_id and notification_time:
+        app.apscheduler.add_job(func=scheduled_task, next_run_time="notification_date",
+                                trigger='interval', seconds=30, args=[chat_id, notification_time], id="chat_id")
+
+    return 'Scheduled several long running tasks.', 200
+
+
+def scheduled_task(chat_id):
+    bot.bot.send_message(chat_id, "Ima ja")

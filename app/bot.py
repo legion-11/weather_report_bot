@@ -1,11 +1,12 @@
+import pytz
+import requests
 import telebot
 import re
 from app import weather, db
 from app.models import User
 from config import Config
 from time import sleep
-from datetime import time
-
+from datetime import time, datetime
 
 bot = telebot.TeleBot(Config.TOKEN, threaded=False)
 bot.remove_webhook()
@@ -211,6 +212,15 @@ def handle_notification_with_time(message):
         if int(hours) >= 24 or int(minutes) >= 60:
             text_message = "Неверный формат времени"
         else:
+            local = pytz.timezone("Europe/Kiev")
+            now = datetime.now(local)
+            print(now)
+            notification_datetime = now.replace(hour=int(hours), minute=int(minutes))
+            print(notification_datetime)
+
+            requests.get(Config.HOST_URL + "run-tasks/",
+                         params={"chat_id": message.chat.id, "notification_time": notification_datetime})
+
             notification_time = time(int(hours), int(minutes))
             user.notification_time = notification_time
             db.session.commit()

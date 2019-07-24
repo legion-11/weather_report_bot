@@ -6,15 +6,19 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_sslify import SSLify
+from flask_apscheduler import APScheduler
 
 
 app = Flask(__name__)
 sslify = SSLify(app)
 app.config.from_object(Config)
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://qmglburntrqick:e184f02ef3f01e928e0ce3d70d77150eef097570a316d1f029ff62bf0628537a@ec2-54-243-208-234.compute-1.amazonaws.com:5432/dc4fumqcquduc"
+# app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://qmglburntrqick:e184f02ef3f01e928e0ce3d70d77150eef097570a316d1f029ff62bf0628537a@ec2-54-243-208-234.compute-1.amazonaws.com:5432/dc4fumqcquduc"
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.start()
 
 if not app.debug:
     if app.config['MAIL_SERVER']:
