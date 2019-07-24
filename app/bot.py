@@ -212,18 +212,8 @@ def handle_notification_with_time(message):
         if int(hours) >= 24 or int(minutes) >= 60:
             text_message = "Неверный формат времени"
         else:
-            local = pytz.timezone("Europe/Kiev")
-            now = datetime.now(local)
-            notification_datetime = now.replace(hour=int(hours), minute=int(minutes))
-            if now > notification_datetime:
-                notification_datetime = notification_datetime.replace(day=now.day + 1)
-            notification_datetime = notification_datetime.strftime("%Y-%m-%d %H:%M:%S")
-            print(now)
-            print(notification_datetime)
-
             requests.get(Config.HOST_URL + "run-tasks",
-                         params={"chat_id": message.chat.id, "notification_time": notification_datetime,
-                                 "hours": hours, "minutes": minutes})
+                         params={"chat_id": message.chat.id, "hours": hours, "minutes": minutes})
 
             notification_time = time(int(hours), int(minutes))
             user.notification_time = notification_time
@@ -234,7 +224,7 @@ def handle_notification_with_time(message):
                        "/city <Имя города>\n" \
                        "/city <шырота> <долгота>"
 
-    bot.send_message(message.chat.id, text_message + "\n" + str(notification_datetime) + "\n" + str(now)+"\n"+str(datetime.now()))
+    bot.send_message(message.chat.id, text_message)
     print(message.text, message.chat.username)
 
 

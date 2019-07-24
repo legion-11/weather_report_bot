@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import pytz
 import telebot
 from app import bot, app
 from flask import request
@@ -19,6 +20,15 @@ def run_tasks():
     chat_id = request.args.get("chat_id")
     hours = int(request.args.get("hours"))
     minutes = int(request.args.get("minutes"))
+
+    local = pytz.timezone("Europe/Kiev")
+    now = datetime.now(local)
+    notification_datetime = now.replace(hour=int(hours), minute=int(minutes), second=0)
+    if now > notification_datetime:
+        notification_datetime = notification_datetime.replace(day=now.day + 1)
+    print(now)
+    print(notification_datetime)
+
     notification_time = request.args.get("notification_time")
     if chat_id and notification_time:
         try:
@@ -26,9 +36,10 @@ def run_tasks():
         except Exception:
             print("ERROR")
         app.apscheduler.add_job(func=scheduled_task,
-                                next_run_time=datetime.now().replace(hour=hours, minute=minutes, second=0),
+                                next_run_time=notification_datetime,
                                 trigger='interval', seconds=30, args=[chat_id], id=chat_id)
 
+    bot.bot(chat_id, f"now: {now}\nnotification: {notification_datetime}\nserver time: {datetime.now()}")
     return 'Scheduled several long running tasks.', 200
 
 
