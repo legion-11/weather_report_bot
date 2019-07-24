@@ -220,7 +220,7 @@ def handle_notification_with_time(message):
 
             requests.get(Config.HOST_URL + "run-tasks",
                          params={"chat_id": message.chat.id, "notification_time": notification_datetime,
-                                 "hours": int(hours), "minutes": int(minutes)})
+                                 "hours": hours, "minutes": minutes})
 
             notification_time = time(int(hours), int(minutes))
             user.notification_time = notification_time

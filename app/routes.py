@@ -17,8 +17,8 @@ def index():
 @app.route('/run-tasks')
 def run_tasks():
     chat_id = request.args.get("chat_id")
-    hours = request.args.get("hours")
-    minutes = request.args.get("minutes")
+    hours = int(request.args.get("hours"))
+    minutes = int(request.args.get("minutes"))
     notification_time = request.args.get("notification_time")
     print(notification_time)
     if chat_id and notification_time:
