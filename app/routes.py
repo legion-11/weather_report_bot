@@ -23,8 +23,8 @@ def run_tasks():
     print(notification_time)
     if chat_id and notification_time:
         app.apscheduler.add_job(func=scheduled_task,
-                                run_date=datetime.now().replace(hour=hours, minute=minutes, second=0),
-                                trigger='date', args=[chat_id], id=chat_id, misfire_grace_time=90_000)
+                                next_run_time=datetime.now().replace(hour=hours, minute=minutes, second=0),
+                                trigger='interval', seconds=30, args=[chat_id], id=chat_id)
 
     return 'Scheduled several long running tasks.', 200
 
