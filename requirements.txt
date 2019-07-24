@@ -6,6 +6,7 @@ Click==7.0
 Flask==1.1.1
 Flask-APScheduler==1.11.0
 Flask-Migrate==2.5.2
+Flask-Script==2.0.6
 Flask-SQLAlchemy==2.4.0
 Flask-SSLify==0.1.5
 gunicorn==19.9.0
@@ -15,6 +16,7 @@ Jinja2==2.10.1
 Mako==1.0.14
 MarkupSafe==1.1.1
 psycopg2==2.8.3
+psycopg2-binary==2.8.3
 pyTelegramBotAPI==3.6.6
 python-dateutil==2.8.0
 python-editor==1.0.4
