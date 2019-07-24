@@ -1,0 +1,10 @@
+__pycache__/
+.idea/
+logs/
+venv/
+migrations/
+app.db
+app/__pycache__/
+app/logs/
+*.pyc
+db.sqlite3
