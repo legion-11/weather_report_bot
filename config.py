@@ -7,7 +7,7 @@ class Config(object):
     HOST_URL = os.environ.get('HOST_URL') or "https://levovit-weather-bot.herokuapp.com/"
     APPID = os.environ.get('APPID') or "5ade4e8d5daf17020d269ca26b52dcd6"
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'app.db')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
     MAIL_PORT = int(os.environ.get('MAIL_PORT') or 25)

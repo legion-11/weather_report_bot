@@ -11,6 +11,7 @@ from flask_sslify import SSLify
 app = Flask(__name__)
 sslify = SSLify(app)
 app.config.from_object(Config)
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:admin@localhost/levovit_db"
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
