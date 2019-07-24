@@ -215,8 +215,11 @@ def handle_notification_with_time(message):
             local = pytz.timezone("Europe/Kiev")
             now = datetime.now(local)
             print(now)
-            notification_datetime = now.replace(hour=int(hours), minute=int(minutes)).strftime("%Y-%m-%d %H:%M:%S")
+            notification_datetime = now.replace(hour=int(hours), minute=int(minutes))
             print(notification_datetime)
+            if now > notification_datetime:
+                notification_datetime.replace(day=now.day+1)
+            notification_datetime = notification_datetime.strftime("%Y-%m-%d %H:%M:%S")
 
             requests.get(Config.HOST_URL + "run-tasks",
                          params={"chat_id": message.chat.id, "notification_time": notification_datetime,
