@@ -215,7 +215,7 @@ def handle_notification_with_time(message):
             local = pytz.timezone("Europe/Kiev")
             now = datetime.now(local)
             print(now)
-            notification_datetime = now.replace(hour=int(hours), minute=int(minutes))
+            notification_datetime = now.replace(hour=int(hours), minute=int(minutes)).strftime("%Y-%m-%d %H:%M:%S")
             print(notification_datetime)
 
             requests.get(Config.HOST_URL + "run-tasks",
