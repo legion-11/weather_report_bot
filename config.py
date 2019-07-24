@@ -3,9 +3,9 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config(object):
-    TOKEN = os.environ.get('TOKEN')
-    HOST_URL = os.environ.get('HOST_URL') or "https://99a93541.ngrok.io"
-    APPID = os.environ.get('APPID')
+    TOKEN = os.environ.get('TOKEN') or "883081543:AAE7ZUQ8os7qsno4GtjH1Bbn2yuOUk9MNmo"
+    HOST_URL = os.environ.get('HOST_URL') or "https://levovit-weather-bot.herokuapp.com/"
+    APPID = os.environ.get('APPID') or "5ade4e8d5daf17020d269ca26b52dcd6"
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
