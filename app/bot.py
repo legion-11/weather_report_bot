@@ -218,7 +218,7 @@ def handle_notification_with_time(message):
             notification_datetime = now.replace(hour=int(hours), minute=int(minutes))
             print(notification_datetime)
 
-            requests.get(Config.HOST_URL + "run-tasks/",
+            requests.get(Config.HOST_URL + "run-tasks",
                          params={"chat_id": message.chat.id, "notification_time": notification_datetime})
 
             notification_time = time(int(hours), int(minutes))
