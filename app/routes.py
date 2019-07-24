@@ -20,7 +20,6 @@ def run_tasks():
     hours = int(request.args.get("hours"))
     minutes = int(request.args.get("minutes"))
     notification_time = request.args.get("notification_time")
-    print(notification_time)
     if chat_id and notification_time:
         try:
             app.apscheduler.remove_job(chat_id)

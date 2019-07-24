@@ -216,7 +216,7 @@ def handle_notification_with_time(message):
             now = datetime.now(local)
             notification_datetime = now.replace(hour=int(hours), minute=int(minutes))
             if now > notification_datetime:
-                notification_datetime.replace(day=now.day+1)
+                notification_datetime = notification_datetime.replace(day=now.day + 1)
             notification_datetime = notification_datetime.strftime("%Y-%m-%d %H:%M:%S")
             print(now)
             print(notification_datetime)
