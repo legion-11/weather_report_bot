@@ -1,4 +1,4 @@
-web: set FLASK_APP=weather_report_bot.py;
+web: export FLASK_APP=weather_report_bot.py;
 export MAIL_SERVER=smtp.googlemail.com;
 export MAIL_PORT=587;
 export MAIL_USE_TLS=1;
