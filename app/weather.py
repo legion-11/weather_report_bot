@@ -103,6 +103,18 @@ def get_weather_report(city_name, days=5):
     message_list = list()
     first_date = data['list'][0]['dt_txt']
 
+    if days == 0:
+        message = ""
+        for moment in data['list']:
+            date = moment['dt_txt']
+            temperature = str(moment['main']['temp'])[:2]
+            condition = moment['weather'][0]['description']
+            if date.endswith("00:00:00") and message:
+                message += f"{date[-8:-3]} {temperature}ºC {condition}\n"
+                return message
+
+            message += f"{date[-8:-3]} {temperature}ºC {condition}\n"
+
     if first_date.endswith("00:00:00"):
         message = f"*Прогноз погоды на N дней для:* {city_name}"
     else:

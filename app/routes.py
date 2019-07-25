@@ -31,7 +31,6 @@ def run_tasks():
                       args=[chat_id, notification_datetime, city], id=chat_id)
     scheduler.start()
 
-    bot.bot.send_message(chat_id, f"now: {now}\nnotification: {notification_datetime}\nserver time: {datetime.now()}")
     return 'Scheduled several long running tasks.', 200
 
 
