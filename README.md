@@ -3,7 +3,7 @@
 Telegram bot that shows the weather forecast
 
 ## How to start
-
+Clone repository
 Create and activate a virtual environment
 
 ```commandline
@@ -12,19 +12,13 @@ source venv/bin/activate
 ```
 Install the required modules
 ```commandline
-pip install flask
-pip install flask-sslify
-pip install pyTelegramBotAPI
-pip install requests
-pip install schedule
-pip install flask-sqlalchemy
-pip install flask-migrate
+pip install -r requirements.txt
 ```
 Create a database
 ```commandline
-flask db init
-flask db migrate -m "users table"
-flask db upgrade
+python manage.py db init
+python manage.py db migrate -m "users table"
+python manage.py db upgrade
 ```
 Set environment variables
 ```commandline
