@@ -284,7 +284,10 @@ def handle_off(message):
     user = User.query.filter_by(username=message.chat.username).first()
     if user:
         user.notification_time = None
-        scheduler.remove_job(message.chat.id)
+        try:
+            scheduler.remove_job(message.chat.id)
+        except Exception:
+            print('das')
         db.session.commit()
 
     bot.send_message(message.chat.id, "Напоминание снято")
