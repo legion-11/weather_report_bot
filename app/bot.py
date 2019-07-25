@@ -258,8 +258,9 @@ def handle_notification_without_minutes(message):
 def handle_notification(message):
     user = User.query.filter_by(username=message.chat.username).first()
     if user:
-        notification_time = str(user.notification_time)[:-3]
+        notification_time = user.notification_time
         if notification_time:
+            notification_time = str(notification_time)[:-3]
             text_message = f"Напоминание установлено на {notification_time}\n" \
                            f"Убрать напоминание: /off "
         else:
@@ -282,12 +283,10 @@ def handle_off(message):
     if user:
         user.notification_time = None
         try:
-            scheduler.remove_job(str(message.chat.id))
+            scheduler.remove_job(message.chat.id)
         except Exception:
-            print('das')
+            print('off error')
         db.session.commit()
 
-    user = User.query.all()
-    for i in user:
-        bot.send_message(message.chat.id, f"{i.username}: {i.user_chat_id} - {i.city}\n{i.notification_time}")
+    bot.send_message(message.chat.id, "Напоминание снято")
     print(message.text, message.chat.username)
