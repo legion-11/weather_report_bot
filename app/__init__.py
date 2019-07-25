@@ -1,8 +1,7 @@
 import os
 import logging
-from logging.handlers import SMTPHandler, RotatingFileHandler
-
 import pytz
+from logging.handlers import SMTPHandler, RotatingFileHandler
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
 from config import Config

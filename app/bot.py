@@ -213,7 +213,7 @@ def handle_notification_with_time(message):
             text_message = "Неверный формат времени"
         else:
             requests.get(Config.HOST_URL + "run-tasks",
-                         params={"chat_id": message.chat.id, "hours": hours, "minutes": minutes})
+                         params={"chat_id": message.chat.id, "hours": hours, "minutes": minutes, "city": user.city})
 
             notification_time = time(int(hours), int(minutes))
             user.notification_time = notification_time
