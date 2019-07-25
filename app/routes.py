@@ -16,7 +16,7 @@ def index():
 
 @app.route('/run-tasks')
 def run_tasks():
-    chat_id = request.args.get("chat_id")
+    chat_id = str(request.args.get("chat_id"))
     hours = int(request.args.get("hours"))
     minutes = int(request.args.get("minutes"))
     city = request.args.get("city")
@@ -28,7 +28,7 @@ def run_tasks():
         notification_datetime = notification_datetime.replace(day=now.day + 1)
 
     scheduler.add_job(func=scheduled_task, trigger='date', run_date=notification_datetime,
-                      args=[chat_id, notification_datetime, city], id=int(chat_id))
+                      args=[chat_id, notification_datetime, city], id=chat_id)
     scheduler.start()
 
     return 'Scheduled several long running tasks.', 200

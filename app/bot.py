@@ -282,7 +282,7 @@ def handle_off(message):
     if user:
         user.notification_time = None
         try:
-            scheduler.remove_job(message.chat.id)
+            scheduler.remove_job(str(message.chat.id))
         except Exception:
             print('das')
         db.session.commit()
