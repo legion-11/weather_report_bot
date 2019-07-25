@@ -1,24 +1,22 @@
 import os
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
+
+import pytz
+from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_sslify import SSLify
-from flask_apscheduler import APScheduler
 
 
 app = Flask(__name__)
 sslify = SSLify(app)
 app.config.from_object(Config)
-# app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://qmglburntrqick:e184f02ef3f01e928e0ce3d70d77150eef097570a316d1f029ff62bf0628537a@ec2-54-243-208-234.compute-1.amazonaws.com:5432/dc4fumqcquduc"
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-
-scheduler = APScheduler()
-scheduler.init_app(app)
-scheduler.start()
+scheduler = BackgroundScheduler(timezone=pytz.timezone("Europe/Kiev"))
 
 if not app.debug:
     if app.config['MAIL_SERVER']:
@@ -53,7 +51,3 @@ if not app.debug:
 
 
 from app import routes, models, bot
-
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))

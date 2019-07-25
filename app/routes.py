@@ -1,8 +1,7 @@
 from datetime import datetime
-
 import pytz
 import telebot
-from app import bot, app
+from app import bot, app, scheduler
 from flask import request
 
 
@@ -29,15 +28,16 @@ def run_tasks():
     delta = notification_datetime - now
     notification_datetime = datetime.now() + delta
 
-    notification_time = request.args.get("notification_time")
-    if chat_id and notification_time:
-        try:
-            app.apscheduler.remove_job(chat_id)
-        except Exception:
-            print("ERROR")
-        app.apscheduler.add_job(func=scheduled_task,
-                                next_run_time=notification_datetime,
-                                trigger='interval', seconds=30, args=[chat_id], id=chat_id)
+    # try:
+    #     app.apscheduler.remove_job(chat_id)
+    # except Exception:
+    #     print("ERROR")
+
+    scheduler.add_job(func=scheduled_task, next_run_time=notification_datetime, trigger='interval', seconds=30,
+                      args=[chat_id], id=chat_id)
+    # app.apscheduler.add_job(func=scheduled_task,
+    #                         next_run_time=notification_datetime,
+    #                         trigger='interval', seconds=30, args=[chat_id], id=chat_id)
 
     bot.bot.send_message(chat_id, f"now: {now}\nnotification: {notification_datetime}\nserver time: {datetime.now()}")
     return 'Scheduled several long running tasks.', 200
