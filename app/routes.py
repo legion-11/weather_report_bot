@@ -26,8 +26,8 @@ def run_tasks():
     notification_datetime = now.replace(hour=int(hours), minute=int(minutes), second=0)
     if now > notification_datetime:
         notification_datetime = notification_datetime.replace(day=now.day + 1)
-    print(now)
-    print(notification_datetime)
+    delta = notification_datetime - now
+    notification_datetime = datetime.now() + delta
 
     notification_time = request.args.get("notification_time")
     if chat_id and notification_time:
@@ -37,7 +37,7 @@ def run_tasks():
             print("ERROR")
         app.apscheduler.add_job(func=scheduled_task,
                                 next_run_time=notification_datetime,
-                                trigger='interval', seconds=30, args=[chat_id], id=chat_id, timezone=local)
+                                trigger='interval', seconds=30, args=[chat_id], id=chat_id)
 
     bot.bot.send_message(chat_id, f"now: {now}\nnotification: {notification_datetime}\nserver time: {datetime.now()}")
     return 'Scheduled several long running tasks.', 200
