@@ -111,7 +111,7 @@ def get_weather_report(city_name, days=5):
             condition = moment['weather'][0]['description']
             if date.endswith("00:00:00") and message:
                 message += f"{date[-8:-3]} {temperature}ºC {condition}\n"
-                return list(message)
+                return [message]
 
             message += f"{date[-8:-3]} {temperature}ºC {condition}\n"
 
