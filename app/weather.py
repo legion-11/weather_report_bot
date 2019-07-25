@@ -104,12 +104,12 @@ def get_weather_report(city_name, days=5):
     first_date = data['list'][0]['dt_txt']
 
     if days == 0:
-        message = ""
+        message = "Прогноз на день\n"
         for moment in data['list']:
             date = moment['dt_txt']
             temperature = str(moment['main']['temp'])[:2]
             condition = moment['weather'][0]['description']
-            if date.endswith("00:00:00") and message:
+            if date.endswith("00:00:00") and message != "Прогноз на день\n":
                 message += f"{date[-8:-3]} {temperature}ºC {condition}\n"
                 return [message]
 
