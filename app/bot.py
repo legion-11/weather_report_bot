@@ -63,7 +63,8 @@ def handle_weather_few_days(message):
     if user:
         city = user.city
         message_list = weather.get_weather_report(city, int(days_number))
-        message_list[0] = message_list[0].replace("N", days_number) if "N" in message_list[0] else message_list[0]
+        if "N" in message_list[0]:
+            message_list[0] = message_list[0].replace("N", days_number)
 
         for msg in message_list:
             bot.send_message(message.chat.id, msg,  parse_mode="Markdown")
