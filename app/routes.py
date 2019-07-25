@@ -35,6 +35,7 @@ def run_tasks():
 
     scheduler.add_job(func=scheduled_task, start_date=notification_datetime, trigger='interval', seconds=30,
                       args=[chat_id], id=chat_id)
+    scheduler.start()
     # app.apscheduler.add_job(func=scheduled_task,
     #                         next_run_time=notification_datetime,
     #                         trigger='interval', seconds=30, args=[chat_id], id=chat_id)
