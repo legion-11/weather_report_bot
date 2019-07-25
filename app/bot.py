@@ -287,5 +287,7 @@ def handle_off(message):
             print('das')
         db.session.commit()
 
-    bot.send_message(message.chat.id, "Напоминание снято")
+    user = User.query.all()
+
+    bot.send_message(message.chat.id, user)
     print(message.text, message.chat.username)
