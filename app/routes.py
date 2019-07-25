@@ -33,17 +33,9 @@ def run_tasks():
     # except Exception:
     #     print("ERROR")
 
-    # scheduler.add_job(func=scheduled_task, start_date=notification_datetime, trigger='interval', seconds=30,
-    #                   args=[chat_id], id=chat_id)
-    # scheduler.start()
-    # app.apscheduler.add_job(func=scheduled_task,
-    #                         next_run_time=notification_datetime,
-    #                         trigger='interval', seconds=30, args=[chat_id], id=chat_id)
-
-    @scheduler.scheduled_job(func=scheduled_task, start_date=notification_datetime, trigger='interval', seconds=30,
-                             args=[chat_id], id=chat_id)
-    def job_function(chat_id2):
-        bot.bot.send_message(chat_id2, "Ima ja")
+    scheduler.add_job(func=scheduled_task, trigger='calendarinterval', days=1, hour=hours, minute=minutes, seconds=00,
+                      args=[chat_id], id=chat_id)
+    scheduler.start()
 
     bot.bot.send_message(chat_id, f"now: {now}\nnotification: {notification_datetime}\nserver time: {datetime.now()}")
     return 'Scheduled several long running tasks.', 200
