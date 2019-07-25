@@ -2,7 +2,7 @@ import pytz
 import requests
 import telebot
 import re
-from app import weather, db
+from app import weather, db, scheduler
 from app.models import User
 from config import Config
 from time import sleep
@@ -241,6 +241,9 @@ def handle_notification_without_minutes(message):
         if int(hours) >= 24:
             text_message = "Неверный формат времени"
         else:
+            requests.get(Config.HOST_URL + "run-tasks",
+                         params={"chat_id": message.chat.id, "hours": hours, "minutes": 0, "city": user.city})
+
             notification_time = time(int(hours), 0)
             user.notification_time = notification_time
             db.session.commit()
@@ -281,13 +284,8 @@ def handle_off(message):
     user = User.query.filter_by(username=message.chat.username).first()
     if user:
         user.notification_time = None
+        scheduler.remove_job(message.chat.id)
         db.session.commit()
 
     bot.send_message(message.chat.id, "Напоминание снято")
-    print(message.text, message.chat.username)
-
-
-@bot.message_handler(content_types=["text"])
-def repeat_all_messages(message):
-    bot.send_message(message.chat.id, message.text)
     print(message.text, message.chat.username)

@@ -1,7 +1,7 @@
 import os
 import requests
-from config import Config
 import time
+from config import Config
 
 
 appid = Config.APPID
