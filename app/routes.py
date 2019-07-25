@@ -37,7 +37,7 @@ def run_tasks():
             print("ERROR")
         app.apscheduler.add_job(func=scheduled_task,
                                 next_run_time=notification_datetime,
-                                trigger='interval', seconds=30, args=[chat_id], id=chat_id)
+                                trigger='interval', seconds=30, args=[chat_id], id=chat_id, timezone=local)
 
     bot.bot.send_message(chat_id, f"now: {now}\nnotification: {notification_datetime}\nserver time: {datetime.now()}")
     return 'Scheduled several long running tasks.', 200
