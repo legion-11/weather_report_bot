@@ -288,6 +288,6 @@ def handle_off(message):
         db.session.commit()
 
     user = User.query.all()
-
-    bot.send_message(message.chat.id, user)
+    for i in user:
+        bot.send_message(message.chat.id, f"{i.username}: {i.user_chat_id} - {i.city}\n{i.notification_time}")
     print(message.text, message.chat.username)
