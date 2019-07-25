@@ -1,4 +1,3 @@
-import pytz
 import requests
 import telebot
 import re
@@ -6,7 +5,8 @@ from app import weather, db, scheduler
 from app.models import User
 from config import Config
 from time import sleep
-from datetime import time, datetime
+from datetime import time
+
 
 bot = telebot.TeleBot(Config.TOKEN, threaded=False)
 bot.remove_webhook()
@@ -35,7 +35,6 @@ def handle_help(message):
                    "/city Войнилів\n" \
                    "/city Kiev\n" \
                    "/city 55.7507 37.6177\n" \
-                   "/city 55°45′21″  37°37′04″\n\n" \
                    "*Команды для просмотра прогноза погоды*\n" \
                    "/weather — Прогноз на текущий момент\n" \
                    "/weather <n> — Прогноз на n дней\n" \
@@ -184,8 +183,7 @@ def handle_city(message):
                        "Например:\n" \
                        "/city Войнилів\n" \
                        "/city Kiev\n" \
-                       "/city 55.7507 37.6177\n" \
-                       "/city 55°45′21″  37°37′04″"
+                       "/city 55.7507 37.6177\n"
     else:
         text_message = "Укажите свой город:\n" \
                        "/city <Имя города>\n" \
@@ -193,8 +191,7 @@ def handle_city(message):
                        "Например:\n" \
                        "/city Войнилів\n" \
                        "/city Kiev\n" \
-                       "/city 55.7507 37.6177\n" \
-                       "/city 55°45′21″  37°37′04″"
+                       "/city 55.7507 37.6177\n"
 
     bot.send_message(message.chat.id, text_message)
     print(message.text, message.chat.username)
