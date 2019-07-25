@@ -33,7 +33,8 @@ def run_tasks():
     # except Exception:
     #     print("ERROR")
 
-    scheduler.add_job(func=scheduled_task, trigger='calendarinterval', days=1, hour=hours, minute=minutes, seconds=00,
+    import apscheduler.triggers.date
+    scheduler.add_job(func=scheduled_task, trigger='date', run_date=notification_datetime,
                       args=[chat_id], id=chat_id)
     scheduler.start()
 
